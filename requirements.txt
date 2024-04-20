@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pymysql
+tortoise-orm
+pyjwt
+aiomysql
