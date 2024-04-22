@@ -18,6 +18,10 @@ class UserRegister(Base):
     password: str
 
 
+class UserAdminRegister(UserRegister):
+    is_admin: bool
+
+
 class UserToken(UserBase):
     token: str
 

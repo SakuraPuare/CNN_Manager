@@ -5,6 +5,7 @@ from PIL import Image
 from fastapi import APIRouter, UploadFile, Depends
 
 from schemas.image import ImageSchema
+from schemas.log import LogsSchema
 from schemas.user import UserSchema
 from utils import image_hash, get_current_user
 
@@ -15,12 +16,15 @@ upload_folder.mkdir(exist_ok=True)
 
 
 @image_router.get("/list")
-async def list_image(page: int = 1):
+async def list_image(page: int = 1, limit: int = 10, user: UserSchema = Depends(get_current_user)):
     count = await ImageSchema.all().count()
-    if count == 0 or page * 10 > count:
+    if count == 0 or page * limit > count:
         return []
 
-    images = await ImageSchema.all().limit(10).offset((page - 1) * 10)
+    images = await ImageSchema.all().limit(10).offset((page - 1) * limit)
+
+    await LogsSchema.create(user=user, action=f"List image {images}")
+
     return images
 
 
@@ -47,6 +51,9 @@ async def upload_image(files: list[UploadFile], user: UserSchema = Depends(get_c
             file_size=len(data)
         )
         success.append(file.filename)
+
+    await LogsSchema.create(user=user, action=f"Upload image {success}")
+
     if not success:
         return {"message": "No image uploaded", "success": False}
     return {"message": "Upload image success", "success": success}

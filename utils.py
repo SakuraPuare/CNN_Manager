@@ -24,7 +24,7 @@ def schema_to_dict(schema) -> dict:
         field_name = field
         value = getattr(schema, field_name)
         if isinstance(value, ReverseRelation):
-            value = [schema_to_dict(i) for i in value.related_objects]
+            value = [schema_to_dict(i) for i in value.related_objects[-10:]]
         elif isinstance(value, datetime.datetime):
             value = value.timestamp()
 
@@ -43,7 +43,7 @@ def generate_bearer_token(data: UserSchema, expires_in: int = 3600) -> str:
     """
 
     to_encode = schema_to_dict(data)
-    expire = datetime.datetime.utcnow() + datetime.timedelta(seconds=expires_in)
+    expire = datetime.datetime.now(datetime.UTC) + datetime.timedelta(seconds=expires_in)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, secret_key, algorithm="HS256")
 
@@ -69,6 +69,5 @@ def image_hash(img: Image, hash_size: int = 16) -> str:
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserSchema:
-    print(token)
     decoded_token = decode_bearer_token(token)
     return await UserSchema.get(id=decoded_token.get("id"))

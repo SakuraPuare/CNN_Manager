@@ -4,6 +4,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from models.user import UserToken, UserRegister
 from router.admin import admin_router
 from router.image import image_router
+from schemas.log import LogsSchema
 from schemas.user import UserSchema
 from utils import generate_bearer_token
 
@@ -22,7 +23,10 @@ async def login(user: OAuth2PasswordRequestForm = Depends()):
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     token = generate_bearer_token(user_obj)
     user_obj.token = token
-    obj = UserToken.from_orm(user_obj)
+    obj = UserToken.model_validate(user_obj)
+
+    await LogsSchema.create(user=user_obj, action=f"User {user_obj.username} logged in")
+
     return obj
 
 
@@ -34,5 +38,8 @@ async def register(user: UserRegister):
     user_obj = await UserSchema.create(**user.dict())
     token = generate_bearer_token(user_obj)
     user_obj.token = token
-    obj = UserToken.from_orm(user_obj)
+    obj = UserToken.model_validate(user_obj)
+
+    await LogsSchema.create(user=user_obj, action=f"User {user_obj.username} registered")
+
     return obj

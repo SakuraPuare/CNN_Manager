@@ -45,19 +45,15 @@ async def auth_middleware(request: Request, call_next):
     if any(request.url.path.startswith(i) for i in white_list):
         response = await call_next(request)
         return response
+
+    if "Authorization" not in request.headers:
+        raise HTTPException(status_code=401, detail="Token is required")
+
     if any(request.url.path.startswith(i) for i in admin_list):
-        try:
-            if "Authorization" not in request.headers:
-                raise HTTPException(status_code=401, detail="Token is required")
-            token = request.headers.get("Authorization")
-            user = get_current_user(token)
-            request.state.user = user
-            if not user.is_admin:
-                raise HTTPException(status_code=401, detail="Permission denied")
-            response = await call_next(request)
-            return response
-        except Exception as e:
-            raise HTTPException(status_code=401, detail="Token is invalid")
+        token = request.headers.get("Authorization")
+        user = await get_current_user(token)
+        if not user.is_admin:
+            raise HTTPException(status_code=401, detail="Permission denied")
     response = await call_next(request)
     return response
 

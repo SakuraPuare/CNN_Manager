@@ -1,7 +1,8 @@
-from tortoise import fields, models
+from tortoise import fields
+from tortoise.models import Model
 
 
-class ImageSchema(models.Model):
+class ImageSchema(Model):
     id = fields.IntField(pk=True)
     user = fields.ForeignKeyField('models.UserSchema', related_name='images')
     name = fields.CharField(max_length=255, null=True)
