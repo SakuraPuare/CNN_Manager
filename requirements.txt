@@ -4,3 +4,4 @@ pymysql
 tortoise-orm
 pyjwt
 aiomysql
+pydantic

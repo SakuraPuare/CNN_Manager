@@ -3,16 +3,26 @@ from pydantic import BaseModel
 
 class UserBase(BaseModel):
     username: str
+    email: str
+    is_admin: bool
 
     class Config:
         orm_mode = True
         from_attributes = True
 
 
-class UserIn(UserBase):
+class UserLogin(BaseModel):
+    username: str
     password: str
 
 
-class UserOut(UserBase):
-    is_admin: bool
+class UserToken(UserBase):
     token: str
+
+
+class UserRegister(UserBase):
+    password: str
+
+
+class UserDetail(UserBase):
+    id: int

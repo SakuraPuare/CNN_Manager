@@ -1,15 +1,20 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from rich.traceback import install
 from tortoise.contrib.fastapi import register_tortoise
 
+from router import base_router
 from schemas import *
-from models import *
 from utils import decode_bearer_token, generate_bearer_token
+
+install(show_locals=True)
 
 app = FastAPI()
 
 origins = [
-    '*'
+    '*',
+    "http://localhost",
+    "http://localhost:8080",
 ]
 
 app.add_middleware(
@@ -22,26 +27,34 @@ app.add_middleware(
 
 white_list = ["/login", "/register"]
 admin_list = ["/admin"]
+class AuthMiddleware:
+    def __init__(self, app):
+        self.app = app
 
+    async def __call__(self, scope, receive, send):
+        if scope["type"] == "http":
+            request = Request(scope, receive)
+            if any(request.url.path.startswith(i) for i in white_list):
+                await self.app(scope, receive, send)
+                return
+            if any(request.url.path.startswith(i) for i in admin_list):
+                try:
+                    if "Authorization" not in request.headers:
+                        raise HTTPException(status_code=401, detail="Token is required")
+                    token = request.headers["Authorization"]
+                    data = decode_bearer_token(token)
+                    user = UserSchema(**data)
+                    request.state.user = user
+                    if not user.is_admin:
+                        raise HTTPException(status_code=401, detail="Permission denied")
+                    await self.app(scope, receive, send)
+                    return
+                except Exception as e:
+                    raise HTTPException(status_code=401, detail="Token is invalid")
+            await self.app(scope, receive, send)
 
-@app.middleware("http")
-async def check_user(request: Request, call_next):
-    if request.url.path not in white_list:
-        if "Authorization" not in request.headers:
-            return 401
-        token = request.headers["Authorization"]
-        try:
-            token = token.split('Bearer ')[-1]
-            decode = decode_bearer_token(token)
-        except Exception as e:
-            return 401
-        is_admin = decode.get("is_admin")
-        if request.url.path in admin_list and not is_admin:
-            return 403
-        else:
-            request.state.user = decode
-    response = await call_next(request)
-    return response
+app.add_middleware(AuthMiddleware)
+app.include_router(base_router)
 
 
 @app.get("/")
@@ -49,33 +62,12 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.post("/login",response_model=UserOut)
-async def login(user: UserIn):
-    user_obj = await UserSchema.get(username=user.username)
-    if not user_obj or user_obj.password != user.password:
-        raise HTTPException(status_code=400, detail="Invalid password")
-    token = generate_bearer_token(user_obj)
-    user_obj.token = token
-    obj = UserOut.from_orm(user_obj)
-    return obj
-
-
-@app.post("/register", response_model=UserOut)
-async def register(user: UserIn):
-    if await UserSchema.filter(username=user.username).exists():
-        raise HTTPException(status_code=400, detail="Username already exists")
-    user_obj = await UserSchema.create(**user.dict())
-    token = generate_bearer_token(user_obj)
-    user_obj.token = token
-    obj = UserOut.from_orm(user_obj)
-    return obj
-
 
 register_tortoise(
     app,
     # memory mode
-    db_url="sqlite://:memory:",
-    # db_url="mysql://root:123456@localhost:3306/cnn",
+    # db_url="sqlite://:memory:",
+    db_url="mysql://root:123456@localhost:3306/cnn",
     modules={"models": ["schemas"]},
     generate_schemas=True,
     add_exception_handlers=True,

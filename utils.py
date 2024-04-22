@@ -1,9 +1,10 @@
-import jwt
 import datetime
 
-# from tortoise import fields
+import jwt
 
 from schemas import UserSchema
+
+# from tortoise import fields
 
 secret_key = 'sakurapuare'
 
@@ -58,5 +59,4 @@ def decode_bearer_token(token: str) -> dict:
     """
 
     decoded_jwt = jwt.decode(token, secret_key, algorithms=["HS256"])
-
     return decoded_jwt
