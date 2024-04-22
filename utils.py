@@ -1,12 +1,17 @@
 import datetime
 
+import imagehash
 import jwt
+from PIL import Image
+from fastapi import Depends
+from fastapi.security import OAuth2PasswordBearer
+from tortoise.fields import ReverseRelation
 
-from schemas import UserSchema
-
-# from tortoise import fields
+from schemas.user import UserSchema
 
 secret_key = 'sakurapuare'
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 def schema_to_dict(schema) -> dict:
@@ -18,14 +23,10 @@ def schema_to_dict(schema) -> dict:
     for field in schema._meta.fields:
         field_name = field
         value = getattr(schema, field_name)
-        # if isinstance(field, fields.ForeignKeyField):
-        #     if value:
-        #         value = value.id
-        #     else:
-        #         value = None
-
-        if isinstance(value, datetime.datetime):
-            value = value.isoformat()
+        if isinstance(value, ReverseRelation):
+            value = [schema_to_dict(i) for i in value.related_objects]
+        elif isinstance(value, datetime.datetime):
+            value = value.timestamp()
 
         data[field_name] = value
     return data
@@ -57,6 +58,17 @@ def decode_bearer_token(token: str) -> dict:
     - token: the token to decode.
     - secret_key: the secret key used to encode the token.
     """
-
+    if token.startswith("Bearer "):
+        token = token.split(" ")[-1]
     decoded_jwt = jwt.decode(token, secret_key, algorithms=["HS256"])
     return decoded_jwt
+
+
+def image_hash(img: Image, hash_size: int = 16) -> str:
+    return imagehash.dhash(img, hash_size=hash_size).__str__()
+
+
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserSchema:
+    print(token)
+    decoded_token = decode_bearer_token(token)
+    return await UserSchema.get(id=decoded_token.get("id"))

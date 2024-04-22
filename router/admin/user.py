@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from models import *
-from schemas import *
+from models.user import UserDetail, UserRegister
+from schemas.user import UserSchema
 
 user_router = APIRouter(prefix="/user", tags=["user"])
 

@@ -1,17 +1,20 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import OAuth2PasswordRequestForm
 
-from models import UserLogin, UserToken, UserRegister
+from models.user import UserToken, UserRegister
 from router.admin import admin_router
-from schemas import UserSchema
+from router.image import image_router
+from schemas.user import UserSchema
 from utils import generate_bearer_token
 
 base_router = APIRouter()
 
 base_router.include_router(admin_router)
+base_router.include_router(image_router)
 
 
 @base_router.post("/login", response_model=UserToken)
-async def login(user: UserLogin):
+async def login(user: OAuth2PasswordRequestForm = Depends()):
     user_obj = await UserSchema.get(username=user.username)
     if not user_obj:
         user_obj = await UserSchema.get(email=user.username)

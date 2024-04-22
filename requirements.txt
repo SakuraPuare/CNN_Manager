@@ -5,3 +5,6 @@ tortoise-orm
 pyjwt
 aiomysql
 pydantic
+python-multipart
+pillow
+imagehash
