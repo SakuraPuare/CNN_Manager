@@ -6,7 +6,7 @@ axios.defaults.headers.get["Access-Control-Allow-Origin"] = "*";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
 const service = axios.create({
-  baseURL: "http://0.0.0.0:8000/", // api的base_url
+  baseURL: "http://localhost:8000/", // api的base_url
   timeout: 5000, // 请求超时时间
 });
 
@@ -16,8 +16,8 @@ service.interceptors.request.use(
     // 在这里你可以做一些请求前的操作
     // 如设置token
     const store = useUserStore();
-    if (store.getters.token) {
-      config.headers["Authorization"] = `Bearer ${store.getters.token}`;
+    if (store.token) {
+      config.headers["Authorization"] = `Bearer ${store.token}`;
     }
     return config;
   },

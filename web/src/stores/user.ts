@@ -1,22 +1,29 @@
 import { defineStore } from "pinia";
-
-interface UserState {
-  username: string;
-  is_admin: boolean;
-  token: string;
-}
+import { UserState } from "../types/user.ts";
 
 export const useUserStore = defineStore("user", {
+  persist: true,
   state: (): UserState => ({
     username: "",
     is_admin: false,
     token: "",
   }),
+  getters: {
+    getUsername(): string {
+      return this.username;
+    },
+    getIsAdmin(): boolean {
+      return this.is_admin;
+    },
+    getToken(): string {
+      return this.token;
+    },
+  },
   actions: {
-    login(name: string, is_admin: boolean, token: string) {
-      this.username = name;
-      this.is_admin = is_admin;
-      this.token = token;
+    login(data: { username: string; is_admin: boolean; token: string }) {
+      this.username = data.username;
+      this.is_admin = data.is_admin;
+      this.token = data.token;
     },
     logout() {
       this.username = "";
@@ -26,28 +33,5 @@ export const useUserStore = defineStore("user", {
     checkLogin() {
       return this.token !== "";
     },
-    getters: {
-      token() {
-        return this.token;
-      },
-      username() {
-        return this.username;
-      },
-      is_admin() {
-        return this.is_admin;
-      },
-    },
-    setters: {
-      setToken(token: string) {
-        this.token = token;
-      },
-      setUserName(name: string) {
-        this.username = name;
-      },
-      setIsAdmin(is_admin: boolean) {
-        this.is_admin = is_admin;
-      },
-    },
   },
-  persist: true,
 });
