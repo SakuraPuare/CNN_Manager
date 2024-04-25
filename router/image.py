@@ -1,9 +1,11 @@
 import io
 import pathlib
+from typing import List
 
-from PIL import Image
+import PIL
 from fastapi import APIRouter, UploadFile, Depends
 
+from models.image import ImageBase
 from schemas.image import ImageSchema
 from schemas.log import LogsSchema
 from schemas.user import UserSchema
@@ -15,25 +17,19 @@ upload_folder = pathlib.Path("upload")
 upload_folder.mkdir(exist_ok=True)
 
 
-@image_router.get("/list")
+@image_router.get("/list", response_model=List[ImageBase])
 async def list_image(page: int = 1, limit: int = 10, user: UserSchema = Depends(get_current_user)):
-    count = await ImageSchema.all().count()
-    if count == 0 or page * limit > count:
-        return []
-
     images = await ImageSchema.all().limit(10).offset((page - 1) * limit)
-
     await LogsSchema.create(user=user, action=f"List image {images}")
-
     return images
 
 
 @image_router.post("/upload")
-async def upload_image(files: list[UploadFile], user: UserSchema = Depends(get_current_user, )):
+async def upload_image(files: List[UploadFile], user: UserSchema = Depends(get_current_user)):
     success = []
     for file in files:
         data = await file.read()
-        img = Image.open(io.BytesIO(data))
+        img = PIL.Image.open(io.BytesIO(data))
         hash = image_hash(img)
 
         if await ImageSchema.get_or_none(image_hash=hash):
@@ -48,6 +44,7 @@ async def upload_image(files: list[UploadFile], user: UserSchema = Depends(get_c
             image_hash=hash,
             height=img.height,
             width=img.width,
+            type=types,
             file_size=len(data)
         )
         success.append(file.filename)
@@ -59,7 +56,8 @@ async def upload_image(files: list[UploadFile], user: UserSchema = Depends(get_c
     return {"message": "Upload image success", "success": success}
 
 
-@image_router.get("/{hash}")
-async def detail_image():
+@image_router.get("/{hash}", response_model=ImageBase)
+async def detail_image(user: UserSchema = Depends(get_current_user)):
     image_obj = await ImageSchema.get_or_none(image_hash=hash)
+    await LogsSchema.create(user=user, action=f"Get image {hash}")
     return image_obj
