@@ -1,10 +1,6 @@
+from datetime import datetime
+
 from models import Base
-
-
-class UserBase(Base):
-    username: str
-    email: str
-    is_admin: bool
 
 
 class UserLogin(Base):
@@ -20,6 +16,15 @@ class UserRegister(Base):
 
 class UserAdminRegister(UserRegister):
     is_admin: bool
+
+
+class UserBase(Base):
+    username: str
+    email: str
+    is_admin: bool
+
+    created_at: datetime
+    updated_at: datetime
 
 
 class UserToken(UserBase):

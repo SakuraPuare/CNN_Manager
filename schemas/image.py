@@ -11,6 +11,7 @@ class ImageSchema(Model):
     height = fields.IntField()
     width = fields.IntField()
     file_size = fields.IntField()
+    type = fields.CharField(max_length=10, null=True)
 
     created_at = fields.DatetimeField(auto_now_add=True)
     updated_at = fields.DatetimeField(auto_now=True)
