@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 # from rich.traceback import install
 from tortoise.contrib.fastapi import register_tortoise
-
+from fastapi.responses import Response
 from router import base_router
 from utils import get_current_user
 
@@ -47,15 +47,16 @@ async def auth_middleware(request: Request, call_next):
         return response
 
     if "Authorization" not in request.headers:
-        raise HTTPException(status_code=401, detail="Token is required")
+        return Response(status_code=401, content="Token is required")
+
+    token = request.headers.get("Authorization")
+    user = await get_current_user(token)
+    if user is None:
+        return Response(status_code=401, content="Invalid token")
 
     if any(request.url.path.startswith(i) for i in admin_list):
-        token = request.headers.get("Authorization")
-        user = await get_current_user(token)
-        if user is None:
-            raise HTTPException(status_code=401, detail="Token is invalid")
         if not user.is_admin:
-            raise HTTPException(status_code=401, detail="Permission denied")
+            return Response(status_code=403, content="Permission denied")
     response = await call_next(request)
     return response
 
