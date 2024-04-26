@@ -8,7 +8,7 @@ from utils import get_current_user
 user_router = APIRouter(prefix="/user", tags=["user"])
 
 
-@user_router.get("/", response_model=list[UserDetail])
+@user_router.get("/list", response_model=list[UserDetail])
 async def get_users(page: int = 1, limit: int = 10, user: UserSchema = Depends(get_current_user)):
     users = await UserSchema.all().limit(limit).offset((page - 1) * limit)
     await LogsSchema.create(user=user, action=f"List users {users}")

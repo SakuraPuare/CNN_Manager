@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 # from rich.traceback import install
 from tortoise.contrib.fastapi import register_tortoise
-from fastapi.responses import Response
+
 from router import base_router
 from utils import get_current_user
 
