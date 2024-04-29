@@ -43,7 +43,7 @@ admin_list = ["/admin"]
 
 @app.middleware("http")
 async def auth_middleware(request: Request, call_next):
-    if any(request.url.path.startswith(i) for i in white_list):
+    if request.method == "OPTIONS" or any(request.url.path.startswith(i) for i in white_list):
         response = await call_next(request)
         return response
 

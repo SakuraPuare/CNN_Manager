@@ -71,6 +71,7 @@ def image_hash(img: Image, hash_size: int = 16) -> str:
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserSchema:
     try:
         decoded_token = decode_bearer_token(token)
-    except jwt.exceptions.ExpiredSignatureError:
+    except jwt.exceptions.ExpiredSignatureError as e:
+        print(e)
         return None
     return await UserSchema.get(id=decoded_token.get("id"))

@@ -33,7 +33,7 @@ async def create_user(new: UserAdminRegister, user: UserSchema = Depends(get_cur
 
 
 @user_router.put("/{user_id}", response_model=UserDetail)
-async def update_user(user_id: int, new: UserAdminRegister, user: UserSchema = Depends(get_current_user)):
+async def update_user(user_id: int, new: UserDetail, user: UserSchema = Depends(get_current_user)):
     # if not exist
     old = await UserSchema.get_or_none(id=user_id)
     if not old:
