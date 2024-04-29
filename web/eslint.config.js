@@ -18,6 +18,14 @@ export default [
         parser: tseslint.parser,
       },
     },
+    rules: {
+      "vue/multi-word-component-names": [
+        "error",
+        {
+          ignores: ["index"], //需要忽略的组件名
+        },
+      ],
+    },
   },
   pluginPrettierRecommendedConfigs,
   pluginJs.configs.recommended,

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useUserStore } from "../stores/user.ts";
+import { useUserStore } from "@/stores/user.ts";
 import router from "./router.ts";
 
 axios.defaults.headers.get["Access-Control-Allow-Origin"] = "*";

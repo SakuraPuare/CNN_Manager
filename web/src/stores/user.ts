@@ -1,16 +1,20 @@
 import { defineStore } from "pinia";
-import { UserState } from "../types/user.ts";
+import { AllInfo, StoreInfo } from "@/types/info";
 
 export const useUserStore = defineStore("user", {
   persist: true,
-  state: (): UserState => ({
+  state: (): StoreInfo => ({
     username: "",
+    email: "",
     is_admin: false,
     token: "",
   }),
   getters: {
     getUsername(): string {
       return this.username;
+    },
+    getEmail(): string {
+      return this.email;
     },
     getIsAdmin(): boolean {
       return this.is_admin;
@@ -20,13 +24,15 @@ export const useUserStore = defineStore("user", {
     },
   },
   actions: {
-    login(data: { username: string; is_admin: boolean; token: string }) {
-      this.username = data.username;
-      this.is_admin = data.is_admin;
-      this.token = data.token;
+    login(info: AllInfo) {
+      this.username = info.username;
+      this.email = info.email;
+      this.is_admin = info.is_admin;
+      this.token = info.token;
     },
     logout() {
       this.username = "";
+      this.email = "";
       this.is_admin = false;
       this.token = "";
     },
