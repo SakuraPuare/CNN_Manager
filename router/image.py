@@ -52,8 +52,8 @@ async def upload_image(files: List[UploadFile], user: UserSchema = Depends(get_c
     await LogsSchema.create(user=user, action=f"Upload image {success}")
 
     if not success:
-        return {"message": "No image uploaded", "success": False}
-    return {"message": "Upload image success", "success": success}
+        return {"detail": "No image uploaded", "success": False}
+    return {"detail": "Upload image success", "success": success}
 
 
 @image_router.get("/{hash}", response_model=ImageBase)

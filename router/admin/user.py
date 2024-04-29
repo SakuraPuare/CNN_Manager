@@ -54,4 +54,4 @@ async def delete_user(user_id: int, user: UserSchema = Depends(get_current_user)
     user_obj = await UserSchema.get(id=user_id)
     await user_obj.delete()
     await LogsSchema.create(user=user, action=f"Delete user {user_obj.username}")
-    return {"message": "User deleted"}
+    return {"detail": "User deleted"}

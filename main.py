@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+from fastapi.responses import JSONResponse
 # from rich.traceback import install
 from tortoise.contrib.fastapi import register_tortoise
 
@@ -48,16 +48,16 @@ async def auth_middleware(request: Request, call_next):
         return response
 
     if "Authorization" not in request.headers:
-        return Response(status_code=401, content="Token is required")
+        return JSONResponse(status_code=401, content={"detail": "Authorization required"})
 
     token = request.headers.get("Authorization")
     user = await get_current_user(token)
     if user is None:
-        return Response(status_code=401, content="Invalid token")
+        return JSONResponse(status_code=401, content={"detail": "Invalid token"})
 
     if any(request.url.path.startswith(i) for i in admin_list):
         if not user.is_admin:
-            return Response(status_code=403, content="Permission denied")
+            return JSONResponse(status_code=403, content={"detail": "Permission denied"})
     response = await call_next(request)
     return response
 
@@ -67,4 +67,4 @@ app.include_router(base_router)
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"detail": "Hello World"}

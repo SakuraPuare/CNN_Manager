@@ -28,15 +28,15 @@ async def get_detection_history(page: int = 1, limit: int = 10, user: UserSchema
 async def detect(hash: str, model_id: int, user: UserSchema = Depends(get_current_user)):
     file = await ImageSchema.get_or_none(image_hash=hash)
     if not file:
-        return {"message": "Image not found"}
+        return {"detail": "Image not found"}
 
     model = await NetworkSchema.get_or_none(id=model_id)
     if not model.exists():
-        return {"message": "Model not found"}
+        return {"detail": "Model not found"}
 
     net = state.get(model.backend, None)
     if net is None:
-        return {"message": "Model not found"}
+        return {"detail": "Model not found"}
 
     import torch
     import torchvision
@@ -80,7 +80,7 @@ async def get_feedback_history(page: int = 1, limit: int = 10, user: UserSchema 
 async def get_feedback_detail(detect_id: int, user: UserSchema = Depends(get_current_user)):
     feedback = await FeedbackSchema.get_or_none(id=detect_id)
     if not feedback:
-        return {"message": "Feedback not found"}
+        return {"detail": "Feedback not found"}
 
     await LogsSchema.create(user=user, action=f"Get feedback {detect_id}")
     return feedback
@@ -90,29 +90,29 @@ async def get_feedback_detail(detect_id: int, user: UserSchema = Depends(get_cur
 async def update(detect_id: int, ground_truth: int, user: UserSchema = Depends(get_current_user)):
     detect = await DetectSchema.get_or_none(id=detect_id)
     if not detect:
-        return {"message": "Detect not found"}
+        return {"detail": "Detect not found"}
 
     await FeedbackSchema.create(user=user, detect=detect, feedback=ground_truth)
     await LogsSchema.create(user=user, action=f"Update detect {detect_id} with feedback {ground_truth}")
-    return {"message": "Feedback updated"}
+    return {"detail": "Feedback updated"}
 
 
 @detect_router.delete("/feedback")
 async def delete(detect_id: int, user: UserSchema = Depends(get_current_user)):
     detect = await DetectSchema.get_or_none(id=detect_id)
     if not detect:
-        return {"message": "Detect not found"}
+        return {"detail": "Detect not found"}
 
     await detect.delete()
     await LogsSchema.create(user=user, action=f"Delete detect {detect_id}")
-    return {"message": "Detect deleted"}
+    return {"detail": "Detect deleted"}
 
 
 @detect_router.get("/{detect_id}", response_model=DetectBase)
 async def get_detection_detail(detect_id: int, user: UserSchema = Depends(get_current_user)):
     detect = await DetectSchema.get_or_none(id=detect_id)
     if not detect:
-        return {"message": "Detect not found"}
+        return {"detail": "Detect not found"}
 
     await LogsSchema.create(user=user, action=f"Get detect {detect_id}")
     return detect
