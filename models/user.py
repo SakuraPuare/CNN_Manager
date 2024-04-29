@@ -13,7 +13,6 @@ class UserRegister(Base):
     email: str
     password: str
 
-
 class UserAdminRegister(UserRegister):
     is_admin: bool
 
