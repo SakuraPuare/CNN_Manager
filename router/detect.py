@@ -24,16 +24,6 @@ async def get_detection_history(page: int = 1, limit: int = 10, user: UserSchema
     return detections
 
 
-@detect_router.get("/{detect_id}", response_model=DetectBase)
-async def get_detection_detail(detect_id: int, user: UserSchema = Depends(get_current_user)):
-    detect = await DetectSchema.get_or_none(id=detect_id)
-    if not detect:
-        return {"message": "Detect not found"}
-
-    await LogsSchema.create(user=user, action=f"Get detect {detect_id}")
-    return detect
-
-
 @detect_router.post("/")
 async def detect(hash: str, model_id: int, user: UserSchema = Depends(get_current_user)):
     file = await ImageSchema.get_or_none(image_hash=hash)
@@ -116,3 +106,13 @@ async def delete(detect_id: int, user: UserSchema = Depends(get_current_user)):
     await detect.delete()
     await LogsSchema.create(user=user, action=f"Delete detect {detect_id}")
     return {"message": "Detect deleted"}
+
+
+@detect_router.get("/{detect_id}", response_model=DetectBase)
+async def get_detection_detail(detect_id: int, user: UserSchema = Depends(get_current_user)):
+    detect = await DetectSchema.get_or_none(id=detect_id)
+    if not detect:
+        return {"message": "Detect not found"}
+
+    await LogsSchema.create(user=user, action=f"Get detect {detect_id}")
+    return detect

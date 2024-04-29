@@ -8,3 +8,5 @@ pydantic
 python-multipart
 pillow
 imagehash
+torch
+torchvision
