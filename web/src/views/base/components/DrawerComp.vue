@@ -70,7 +70,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
           </el-menu-item>
         </router-link>
       </el-sub-menu>
-      <router-link to="/model">
+      <router-link to="/network">
         <el-menu-item>
           <el-icon>
             <font-awesome-icon :icon="faDatabase" />

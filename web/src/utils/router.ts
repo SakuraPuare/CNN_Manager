@@ -23,9 +23,9 @@ const routes = [
             component: () => import("@/views/base/detect/DetectHistory.vue"),
           },
           {
-            path: "/model",
+            path: "/network",
             meta: { title: "模型" },
-            component: () => import("@/views/base/ModelIndex.vue"),
+            component: () => import("@/views/base/NetworkIndex.vue"),
           },
           {
             path: "/image",

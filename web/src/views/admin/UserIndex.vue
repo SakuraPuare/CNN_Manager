@@ -112,7 +112,6 @@ const SelectUser = ref<StringIdUser>({
 });
 
 const onUpdateSelectedUser = () => {
-  console.log(tableData.value);
   for (let i = 0; i < tableData.value.length; i++) {
     // compare string and number
     if (tableData.value[i].id === Number(SelectUser.value.id)) {

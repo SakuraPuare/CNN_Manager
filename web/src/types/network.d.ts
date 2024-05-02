@@ -11,6 +11,17 @@ export type Network = {
   updated_at: string;
 };
 
+export type StringIdNetwork = {
+  id: string;
+  name: string;
+  description: string;
+  network: string;
+  backend: string;
+  catalog: string;
+  created_at: string;
+  updated_at: string;
+};
+
 export type getNetworkParams = Id;
 export type getNetworkResponse = Network;
 

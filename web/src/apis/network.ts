@@ -36,7 +36,7 @@ export const postNetworkAPI = (
   params: postNetworkParams,
 ): Promise<postNetworkResponse> => {
   return http
-    .post("/network", { params })
+    .post("/network", params)
     .then((res) => res.data as Promise<postNetworkResponse>);
 };
 
@@ -45,7 +45,7 @@ export const putNetworkAPI = (
 ): Promise<putNetworkResponse> => {
   const { id, ...rest } = params;
   return http
-    .put(`/network/${id}`, { rest })
+    .put(`/network/${id}`, rest)
     .then((res) => res.data as Promise<putNetworkResponse>);
 };
 
