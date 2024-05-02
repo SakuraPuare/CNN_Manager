@@ -15,7 +15,11 @@ const routes = [
           {
             path: "/detect",
             meta: { title: "检测" },
-            component: () => import("@/views/base/DetectIndex.vue"),
+            component: () => import("@/views/base/detect/DetectIndex.vue"),
+          },          {
+            path: "/detect/history",
+            meta: { title: "检测" },
+            component: () => import("@/views/base/detect/DetectHistory.vue"),
           },
           {
             path: "/model",
@@ -23,9 +27,14 @@ const routes = [
             component: () => import("@/views/base/ModelIndex.vue"),
           },
           {
-            path: "/picture",
+            path: "/image",
             meta: { title: "图片" },
-            component: () => import("@/views/base/PictureIndex.vue"),
+            component: () => import("@/views/base/image/ImageIndex.vue"),
+          },
+          {
+            path: "/image/upload",
+            meta: { title: "图片" },
+            component: () => import("@/views/base/image/ImageUpload.vue"),
           },
         ],
       },

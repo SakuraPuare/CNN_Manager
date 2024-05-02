@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { getNetworkListAPI } from "@/apis/network";
+import { getNetworkListAPI } from "@/apis/network.ts";
 import { Network } from "@/types/network";
 import UploadComp from "@/views/base/components/UploadComp.vue";
 import { onMounted, ref } from "vue";
 import { postImageResponse } from "@/types/image";
-import { postDetectAPI } from "@/apis/detect/detect";
+import { postDetectAPI } from "@/apis/detect/detect.ts";
 import { postDetectParams, postDetectResponse } from "@/types/detect/detect";
 
 const selectedModelId = ref("");
