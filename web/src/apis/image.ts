@@ -20,5 +20,5 @@ export const postImageAPI = async (
 ): Promise<postImageResponse> => {
   return http
     .post("/image", getFormData(params))
-    .then((res) => res.data as postImageResponse);
+    .then((res) => res.data as Promise<postImageResponse>);
 };

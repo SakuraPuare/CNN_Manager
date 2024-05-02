@@ -35,14 +35,19 @@ const routes = [
         component: () => import("@/views/admin/LayoutIndex.vue"),
         children: [
           {
+            path: "/admin",
+            meta: { title: "首页", needLogin: true },
+            component: () => import("@/views/admin/AdminIndex.vue"),
+          },
+          {
             path: "/admin/user",
             meta: { title: "用户管理", needLogin: true },
             component: () => import("@/views/admin/UserIndex.vue"),
           },
           {
-            path: "/admin",
-            meta: { title: "首页", needLogin: true },
-            component: () => import("@/views/admin/AdminIndex.vue"),
+            path: "/admin/log",
+            meta: { title: "日志管理", needLogin: true },
+            component: () => import("@/views/admin/LogIndex.vue"),
           },
         ],
       },
@@ -62,8 +67,7 @@ const routes = [
     path: "/403",
     meta: { title: "403 Forbidden" },
     component: () => import("@/views/pages/403ForbiddenView.vue"),
-  },
-  // {
+  }, // {
   //   path: "/:pathMatch(.*)*",
   //   redirect: "/404",
   // },
