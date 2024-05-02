@@ -10,7 +10,7 @@ user_router = APIRouter(prefix="/user", tags=["user"])
 
 @user_router.get("/list", response_model=list[UserDetail])
 async def get_users(page: int = 1, limit: int = 10, user: UserSchema = Depends(get_current_user)):
-    users = await UserSchema.all().limit(limit).offset((page - 1) * limit)
+    users = await UserSchema.all()
     await LogsSchema.create(user=user, action=f"List users {users}")
     return [UserDetail.model_validate(user) for user in users]
 
@@ -46,7 +46,7 @@ async def update_user(user_id: int, new: UserAdminRegister, user: UserSchema = D
     await user_obj.save()
 
     await LogsSchema.create(user=user, action=f"Update user {user_obj.username}")
-    return UserDetail.model_validate(user_obj)
+    return {"detail": "User updated"}
 
 
 @user_router.delete("/{user_id}")

@@ -13,6 +13,7 @@ class UserRegister(Base):
     email: str
     password: str
 
+
 class UserAdminRegister(UserRegister):
     is_admin: bool
 
@@ -27,6 +28,7 @@ class UserBase(Base):
 
 
 class UserToken(UserBase):
+    id: int
     token: str
 
 

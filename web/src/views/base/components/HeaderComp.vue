@@ -23,12 +23,6 @@ const logout = () => {
     <router-link to="/">
       <span class="text-xl font-bold">CNN图像识别系统</span>
     </router-link>
-    <ul class="text-xl text-white space-x-8">
-      <!--      <router-link to="/dashboard">Dashboard</router-link>-->
-      <!--      <router-link to="/table">Table</router-link>-->
-      <!--      <router-link to="/trace">Trace</router-link>-->
-      <router-link to="/admin">Admin</router-link>
-    </ul>
     <div class="flex-grow"></div>
     <div class="flex flex-row items-center justify-center space-x-8">
       <span>

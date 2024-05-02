@@ -10,9 +10,9 @@ from utils import get_current_user
 network_router = APIRouter(prefix="/network", tags=["network"])
 
 
-@network_router.get("/", response_model=List[Network])
+@network_router.get("/list", response_model=List[Network])
 async def get_available_networks(page: int = 1, limit: int = 10, user: UserSchema = Depends(get_current_user)):
-    images = await NetworkSchema.all().limit(10).offset((page - 1) * limit)
+    images = await NetworkSchema.all()
     await LogsSchema.create(user=user, action=f"List network {images}")
     return images
 

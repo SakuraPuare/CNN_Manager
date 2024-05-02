@@ -37,12 +37,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-white_list = ["/login", "/register"]
+white_list = ["/login", "/register", "/image/file"]
 admin_list = ["/admin"]
 
 
 @app.middleware("http")
 async def auth_middleware(request: Request, call_next):
+    print([request.url.path.startswith(i) for i in white_list])
     if request.method == "OPTIONS" or any(request.url.path.startswith(i) for i in white_list):
         response = await call_next(request)
         return response

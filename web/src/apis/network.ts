@@ -11,6 +11,7 @@ import {
   putNetworkResponse,
 } from "@/types/network";
 import http from "@/utils/http";
+import { PAGINATION } from "@/config.ts";
 
 export const getNetworkAPI = (
   params: getNetworkParams,
@@ -21,7 +22,10 @@ export const getNetworkAPI = (
 };
 
 export const getNetworkListAPI = (
-  params: getNetworkListParams,
+  params: getNetworkListParams = {
+    page: 1,
+    limit: PAGINATION,
+  },
 ): Promise<getNetworkListResponse> => {
   return http
     .get("/network/list", { params })

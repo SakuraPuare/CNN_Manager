@@ -7,6 +7,10 @@ export type createUser = {
   password: string;
 };
 
+export type StringIdUser = createUser & {
+  id: string;
+};
+
 export type getUserParams = Id;
 export type getUserResponse = User;
 

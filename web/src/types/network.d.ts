@@ -1,3 +1,5 @@
+import { Detail, Id, Pagination } from "@/types/types";
+
 export type Network = {
   id: number;
   name: string;

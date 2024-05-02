@@ -1,15 +1,22 @@
 <script lang="ts" setup>
 import { h, onMounted, ref, VNode } from "vue";
-import { userInfoListAPI } from "@/apis/admin/userInfoList";
-import { UserInfoListParams } from "@/types/admin/userInfoList";
-import { SelectUserInfo, UserInfo } from "@/types/info";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faAdd, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { createUserAPI } from "@/apis/admin/createUser";
-import { updateUserAPI } from "@/apis/admin/updateUser";
-import { deleteUserAPI } from "@/apis/admin/deleteUser.ts";
+import {
+  deleteUserAPI,
+  getUserListAPI,
+  postUserAPI,
+  putUserAPI,
+} from "@/apis/admin/user.ts";
+import {
+  deleteUserParams,
+  getUserListParams,
+  getUserListResponse,
+  putUserParams,
+  StringIdUser,
+} from "@/types/admin/user";
 
-const tableData = ref<UserInfo[]>([]);
+const tableData = ref<getUserListResponse>([]);
 const currPage = ref<number>(1);
 
 const columns = [
@@ -80,11 +87,11 @@ const columns = [
 ];
 
 const getPageData = async () => {
-  const params: UserInfoListParams = {
+  const params: getUserListParams = {
     page: currPage.value,
     limit: 10,
   };
-  tableData.value = await userInfoListAPI(params);
+  tableData.value = await getUserListAPI(params);
 };
 
 onMounted(async () => {
@@ -96,7 +103,7 @@ const EditDialogVisible = ref<boolean>(false);
 const DeleteDialogVisible = ref<boolean>(false);
 const DeleteConfirmDialogVisible = ref<boolean>(false);
 
-const SelectUser = ref<SelectUserInfo>({
+const SelectUser = ref<StringIdUser>({
   email: "",
   id: "",
   is_admin: false,
@@ -121,7 +128,7 @@ const onAddUser = async () => {
   if (!SelectUser.value.username || !SelectUser.value.email) {
     return;
   }
-  await createUserAPI(SelectUser.value);
+  await postUserAPI(SelectUser.value);
   await getPageData();
   AddDialogVisible.value = false;
 };
@@ -130,14 +137,23 @@ const onEditUser = async () => {
   if (!SelectUser.value.username || !SelectUser.value.email) {
     return;
   }
-  await updateUserAPI(SelectUser.value);
+  const params: putUserParams = {
+    id: Number(SelectUser.value.id),
+    username: SelectUser.value.username,
+    email: SelectUser.value.email,
+    is_admin: SelectUser.value.is_admin,
+    password: "", // Add the missing "password" property
+  };
+  await putUserAPI(params);
   await getPageData();
   EditDialogVisible.value = false;
 };
 
 const onDeleteUser = async () => {
   onUpdateSelectedUser();
-  const params = { id: SelectUser.value.id };
+  const params: deleteUserParams = {
+    id: Number(SelectUser.value.id),
+  };
   await deleteUserAPI(params);
   await getPageData();
   DeleteDialogVisible.value = false;
@@ -154,7 +170,7 @@ const onDeleteUser = async () => {
 
 <template>
   <div
-    class="flex flex-col container mx-[3%] my-[2%] rounded-2xl p-8 text-center space-y-4"
+    class="flex flex-col container mx-[3%] my-[2%] rounded-2xl p-8 space-y-4 text-center"
   >
     <div class="text-2xl font-bold">用户列表</div>
     <div class="flex-grow h-full w-full">

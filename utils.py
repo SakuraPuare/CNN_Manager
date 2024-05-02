@@ -32,7 +32,7 @@ def schema_to_dict(schema) -> dict:
     return data
 
 
-def generate_bearer_token(data: UserSchema, expires_in: int = 3600) -> str:
+def generate_bearer_token(data: UserSchema, expires_in: int = 360000) -> str:
     """
     Generate a bearer token.
 

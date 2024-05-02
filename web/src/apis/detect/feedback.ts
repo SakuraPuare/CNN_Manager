@@ -1,3 +1,4 @@
+import { PAGINATION } from "@/config";
 import { postDetectParams, postDetectResponse } from "@/types/detect/detect";
 import {
   deleteFeedbackParams,
@@ -18,7 +19,10 @@ export const getFeedbackAPI = async (
 };
 
 export const getFeedbackListAPI = async (
-  params: getFeedbackListParams,
+  params: getFeedbackListParams = {
+    page: 1,
+    limit: PAGINATION,
+  },
 ): Promise<getFeedbackListResponse> => {
   return http
     .get("/detect/feedback/list", { params })
@@ -29,7 +33,7 @@ export const postFeedbackAPI = async (
   params: postDetectParams,
 ): Promise<postDetectResponse> => {
   return http
-    .post("/detect/feedback", { params })
+    .post("/detect/feedback", null, { params })
     .then((res) => res.data as Promise<postDetectResponse>);
 };
 

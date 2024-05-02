@@ -1,15 +1,23 @@
 <script lang="ts" setup>
-import { faHome, faList } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faHome, faList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 </script>
 
 <template>
   <div class="max-w-[20%] w-[20%] h-full">
     <el-menu class="flex flex-col h-full">
-      <router-link to="/admin/">
+      <router-link to="/">
         <el-menu-item>
           <el-icon>
             <font-awesome-icon :icon="faHome" />
+          </el-icon>
+          <template #title>主页</template>
+        </el-menu-item>
+      </router-link>
+      <router-link to="/admin/">
+        <el-menu-item>
+          <el-icon>
+            <font-awesome-icon :icon="faGear" />
           </el-icon>
           <template #title>系统管理</template>
         </el-menu-item>

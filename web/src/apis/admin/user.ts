@@ -2,6 +2,7 @@ import {
   deleteUserParams,
   deleteUserResponse,
   getUserListParams,
+  getUserListResponse,
   getUserParams,
   getUserResponse,
   postUserParams,
@@ -10,6 +11,7 @@ import {
   putUserResponse,
 } from "@/types/admin/user";
 import http from "@/utils/http";
+import { PAGINATION } from "@/config.ts";
 
 export const getUserAPI = async (
   params: getUserParams,
@@ -20,11 +22,14 @@ export const getUserAPI = async (
 };
 
 export const getUserListAPI = async (
-  params: getUserParams,
-): Promise<getUserListParams> => {
+  params: getUserListParams = {
+    page: 1,
+    limit: PAGINATION,
+  },
+): Promise<getUserListResponse> => {
   return http
     .get("/admin/user/list", { params })
-    .then((res) => res.data as Promise<getUserListParams>);
+    .then((res) => res.data as Promise<getUserListResponse>);
 };
 
 export const postUserAPI = async (
