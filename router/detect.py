@@ -17,6 +17,13 @@ model_path = pathlib.Path("ckpt")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
+@detect_router.get("/list", response_model=List[DetectBase])
+async def get_detection_history(page: int = 1, limit: int = 10, user: UserSchema = Depends(get_current_user)):
+    detections = await DetectSchema.all()
+    await LogsSchema.create(user=user, action=f"List detections {detections}")
+    return detections
+
+
 @detect_router.get("/{id}", response_model=DetectBase)
 async def get_detection_detail(id: int, user: UserSchema = Depends(get_current_user)):
     detect = await DetectSchema.get_or_none(id=id)
@@ -25,13 +32,6 @@ async def get_detection_detail(id: int, user: UserSchema = Depends(get_current_u
 
     await LogsSchema.create(user=user, action=f"Get detect {id}")
     return detect
-
-
-@detect_router.get("/list", response_model=List[DetectBase])
-async def get_detection_history(page: int = 1, limit: int = 10, user: UserSchema = Depends(get_current_user)):
-    detections = await DetectSchema.all()
-    await LogsSchema.create(user=user, action=f"List detections {detections}")
-    return detections
 
 
 @detect_router.post("/")
