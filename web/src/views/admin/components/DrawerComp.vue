@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import {faFile, faGear, faHome, faList, faUser} from "@fortawesome/free-solid-svg-icons";
+import {
+  faFile,
+  faGear,
+  faHome,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 </script>
 
