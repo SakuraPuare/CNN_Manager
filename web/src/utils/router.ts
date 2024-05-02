@@ -16,7 +16,8 @@ const routes = [
             path: "/detect",
             meta: { title: "检测" },
             component: () => import("@/views/base/detect/DetectIndex.vue"),
-          },          {
+          },
+          {
             path: "/detect/history",
             meta: { title: "检测" },
             component: () => import("@/views/base/detect/DetectHistory.vue"),

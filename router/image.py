@@ -20,7 +20,7 @@ upload_folder.mkdir(exist_ok=True)
 
 @image_router.get("/list", response_model=List[ImageBase])
 async def list_image(page: int = 1, limit: int = 10, user: UserSchema = Depends(get_current_user)):
-    images = await ImageSchema.all().limit(10).offset((page - 1) * limit)
+    images = await ImageSchema.all()
     await LogsSchema.create(user=user, action=f"List image {images}")
     return images
 

@@ -17,7 +17,7 @@ onMounted(async () => {
   >
     <div class="text-2xl font-bold text-center">图片列表</div>
 
-    <el-scrollbar class="w-full h-full">
+    <el-scrollbar class="w-full h-full" scroll-container>
       <div class="space-y-8">
         <div
           v-for="item in imageList"
@@ -29,7 +29,7 @@ onMounted(async () => {
               :src="`${BASE_URL}image/file/${item.image_hash}`"
               class="h-48"
               fit="contain"
-              loading="lazy"
+              lazy
             />
           </div>
           <ul
@@ -42,7 +42,7 @@ onMounted(async () => {
             <li>上传时间：{{ new Date(item.created_at).toLocaleString() }}</li>
             <li>图片大小：{{ item.width }} x {{ item.height }}</li>
             <li>
-              图片哈希：<span class="text-sm">{{ item.image_hash }}</span>
+              图片哈希：<span class="text-md">{{ item.image_hash }}</span>
             </li>
           </ul>
         </div>

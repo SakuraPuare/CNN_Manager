@@ -12,9 +12,13 @@ import { ref } from "vue";
 import { postImageAPI } from "@/apis/image";
 import { postImageParams, postImageResponse } from "@/types/image";
 
-const props = defineProps<{
+interface Props {
   limit: number;
-}>();
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  limit: 1000000,
+});
 const emits = defineEmits(["uploadSuccess"]);
 
 const uploadFile = ref<UploadInstance>();
@@ -37,29 +41,31 @@ const onUploadSuccess = (response: postImageResponse) => {
 </script>
 
 <template>
-  <el-upload
-    ref="uploadFile"
-    :http-request="onUpload"
-    :limit="props.limit || 1"
-    :on-exceed="onFileExceed"
-    :on-success="onUploadSuccess"
-    class="w-full"
-    drag
-    list-type="picture"
-    multiple
-  >
-    <el-icon class="el-icon--upload">
-      <font-awesome-icon :icon="faCloud" />
-    </el-icon>
-    <div class="el-upload__text">
-      Drop file here or <em>click to upload</em>
-    </div>
-    <template #tip>
-      <div class="el-upload__tip">
-        jpg/png files with a size less than 500kb
+  <el-scrollbar>
+    <el-upload
+      ref="uploadFile"
+      :http-request="onUpload"
+      :limit="props.limit"
+      :on-exceed="onFileExceed"
+      :on-success="onUploadSuccess"
+      class="w-full"
+      drag
+      list-type="picture"
+      multiple
+    >
+      <el-icon class="el-icon--upload">
+        <font-awesome-icon :icon="faCloud" />
+      </el-icon>
+      <div class="el-upload__text">
+        Drop file here or <em>click to upload</em>
       </div>
-    </template>
-  </el-upload>
+      <template #tip>
+        <div class="el-upload__tip">
+          jpg/png files with a size less than 500kb
+        </div>
+      </template>
+    </el-upload>
+  </el-scrollbar>
 </template>
 
 <style scoped></style>
