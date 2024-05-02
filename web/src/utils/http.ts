@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useUserStore } from "@/stores/user.ts";
 import router from "./router.ts";
+import { ElMessage } from "element-plus";
 
 axios.defaults.headers.get["Access-Control-Allow-Origin"] = "*";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
@@ -31,9 +32,13 @@ service.interceptors.request.use(
 // response拦截器
 service.interceptors.response.use(
   (response) => {
+    if (response.status !== 200) {
+      ElMessage({ message: response.data.detail || "服务异常", type: "error" });
+    }
     if (response.status === 401) {
       router.push("/login").then((r) => console.log(r));
     }
+
     return response;
   },
   (error) => {

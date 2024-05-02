@@ -22,7 +22,7 @@ export default [
       "vue/multi-word-component-names": [
         "error",
         {
-          ignores: ["index"], //需要忽略的组件名
+          ignores: ["index", "Index"], //需要忽略的组件名
         },
       ],
     },

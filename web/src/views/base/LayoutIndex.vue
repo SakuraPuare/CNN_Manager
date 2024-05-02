@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import HeaderComp from "@/views/layout/components/HeaderComp.vue";
+import HeaderComp from "@/views/base/components/HeaderComp.vue";
 </script>
 
 <template>

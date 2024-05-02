@@ -27,7 +27,7 @@ const logout = () => {
       <!--      <router-link to="/dashboard">Dashboard</router-link>-->
       <!--      <router-link to="/table">Table</router-link>-->
       <!--      <router-link to="/trace">Trace</router-link>-->
-      <!--      <router-link to="/about">About</router-link>-->
+      <router-link to="/admin">Admin</router-link>
     </ul>
     <div class="flex-grow"></div>
     <div class="flex flex-row items-center justify-center space-x-8">
@@ -39,10 +39,12 @@ const logout = () => {
 
       <span v-if="user.checkLogin()">
         <el-popover :width="200" placement="bottom" trigger="click">
-          <div>
-            {{ user.username }}
+          <div class="text-center">
+            <div>
+              {{ user.username }}
+            </div>
+            <el-button type="text" @click="logout">退出</el-button>
           </div>
-          <el-button type="text" @click="logout">退出</el-button>
           <template #reference>
             <font-awesome-icon :icon="faUser" class="h-6 w-6" />
           </template>
