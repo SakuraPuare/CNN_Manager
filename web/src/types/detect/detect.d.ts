@@ -1,3 +1,5 @@
+import { Pagination } from "../types";
+
 export type Detect = {
   id: number;
   user_id: number;
@@ -9,7 +11,10 @@ export type Detect = {
   updated_at: string;
 };
 
-export type getDetectListParams = {};
+export type getDetectParams = Id;
+export type getDetectResponse = Detect;
+
+export type getDetectListParams = Pagination;
 export type getDetectListResponse = Detect[];
 
 export type postDetectParams = {

@@ -8,6 +8,11 @@ export type Feedback = {
   created_at: string;
   updated_at: string;
 };
+export type StringIdFeedback = {
+  id: string;
+  detect_id: string;
+  feedback: string;
+};
 
 export type getFeedbackParams = Id;
 export type getFeedbackResponse = Feedback;
@@ -19,7 +24,8 @@ export type postFeedbackParams = {
   detect_id: number;
   ground_truth: number;
 };
-export type postFeedbackResponse = Detail;
+export type postFeedbackResponse = Feedback;
+
 
 export type deleteFeedbackParams = Id;
 export type deleteFeedbackResponse = Detail;

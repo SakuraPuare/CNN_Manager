@@ -6,6 +6,7 @@ from router.admin import admin_router
 from router.detect import detect_router
 from router.image import image_router
 from router.network import network_router
+from schemas import ImageSchema, NetworkSchema
 from schemas.log import LogsSchema
 from schemas.user import UserSchema
 from utils import generate_bearer_token
@@ -47,3 +48,20 @@ async def register(user: UserRegister):
     await LogsSchema.create(user=user_obj, action=f"User {user_obj.username} registered")
 
     return obj
+
+
+@base_router.get("/detail")
+async def detail():
+    detect_count = await LogsSchema.all().count()
+    image_count = await ImageSchema.all().count()
+    logs_count = await LogsSchema.all().count()
+    network_count = await NetworkSchema.all().count()
+    user_count = await UserSchema.all().count()
+
+    return {
+        "detect_count": detect_count,
+        "image_count": image_count,
+        "logs_count": logs_count,
+        "network_count": network_count,
+        "user_count": user_count
+    }

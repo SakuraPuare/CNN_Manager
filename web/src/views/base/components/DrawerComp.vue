@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {
   faClock,
-  faCloud,
+  faCloud, faComment,
   faDatabase,
   faEye,
   faGear,
@@ -43,6 +43,14 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
               <font-awesome-icon :icon="faClock" />
             </el-icon>
             <template #title>历史记录</template>
+          </el-menu-item>
+        </router-link>
+        <router-link to="/detect/feedback">
+          <el-menu-item index="2-3">
+            <el-icon>
+              <font-awesome-icon :icon="faComment" />
+            </el-icon>
+            <template #title>检测反馈</template>
           </el-menu-item>
         </router-link>
       </el-sub-menu>

@@ -19,8 +19,12 @@ const routes = [
           },
           {
             path: "/detect/history",
-            meta: { title: "检测" },
+            meta: { title: "检测历史" },
             component: () => import("@/views/base/detect/DetectHistory.vue"),
+          },          {
+            path: "/detect/feedback",
+            meta: { title: "检测反馈" },
+            component: () => import("@/views/base/detect/DetectFeedback.vue"),
           },
           {
             path: "/network",

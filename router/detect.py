@@ -96,8 +96,8 @@ async def update(detect_id: int, ground_truth: int, user: UserSchema = Depends(g
 
 
 @detect_router.delete("/feedback/{id}")
-async def delete(id: int, user: UserSchema = Depends(get_current_user)):
-    detect = await DetectSchema.get(id=id)
-    await detect.delete()
-    await LogsSchema.create(user=user, action=f"Delete detect {id}")
-    return {"detail": "Detect deleted"}
+async def delete_feedback(id: int, user: UserSchema = Depends(get_current_user)):
+    feedback = await FeedbackSchema.get(id=id)
+    await feedback.delete()
+    await LogsSchema.create(user=user, action=f"Delete feedback {id}")
+    return {"detail": "Feedback deleted"}

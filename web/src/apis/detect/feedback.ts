@@ -7,6 +7,8 @@ import {
   getFeedbackListResponse,
   getFeedbackParams,
   getFeedbackResponse,
+  postFeedbackParams,
+  postFeedbackResponse,
 } from "@/types/detect/feedback";
 import http from "@/utils/http";
 
@@ -30,11 +32,11 @@ export const getFeedbackListAPI = async (
 };
 
 export const postFeedbackAPI = async (
-  params: postDetectParams,
-): Promise<postDetectResponse> => {
+  params: postFeedbackParams,
+): Promise<postFeedbackResponse> => {
   return http
     .post("/detect/feedback", null, { params })
-    .then((res) => res.data as Promise<postDetectResponse>);
+    .then((res) => res.data as Promise<postFeedbackResponse>);
 };
 
 export const deleteFeedbackAPI = async (
