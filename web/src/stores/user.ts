@@ -23,7 +23,12 @@ export const useUserStore = defineStore("user", {
     },
   },
   actions: {
-    login(info: { username: string; email: string; is_admin: boolean; token: string }) {
+    login(info: {
+      username: string;
+      email: string;
+      is_admin: boolean;
+      token: string;
+    }) {
       this.username = info.username;
       this.email = info.email;
       this.is_admin = info.is_admin;

@@ -45,7 +45,7 @@ export const putUserAPI = async (
 ): Promise<putUserResponse> => {
   const { id, ...rest } = params;
   return http
-    .put(`/admin/user/${id}`, { rest })
+    .put(`/admin/user/${id}`, rest)
     .then((res) => res.data as Promise<putUserResponse>);
 };
 
