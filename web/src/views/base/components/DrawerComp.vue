@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import {
   faClock,
-  faCloud, faComment,
+  faCloud,
+  faComment,
   faDatabase,
   faEye,
   faGear,

@@ -26,6 +26,5 @@ export type postFeedbackParams = {
 };
 export type postFeedbackResponse = Feedback;
 
-
 export type deleteFeedbackParams = Id;
 export type deleteFeedbackResponse = Detail;

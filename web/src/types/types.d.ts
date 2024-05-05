@@ -19,3 +19,9 @@ export type User = {
   created_at: string;
   updated_at: string;
 };
+
+export type UserBase = {
+  username: string;
+  email: string;
+  is_admin: boolean;
+};

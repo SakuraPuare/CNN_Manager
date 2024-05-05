@@ -36,7 +36,7 @@ export const postUserAPI = async (
   params: postUserParams,
 ): Promise<postUserResponse> => {
   return http
-    .post("/admin/user", { params })
+    .post("/admin/user", params)
     .then((res) => res.data as Promise<postUserResponse>);
 };
 

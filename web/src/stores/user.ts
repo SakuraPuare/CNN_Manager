@@ -1,9 +1,8 @@
 import { defineStore } from "pinia";
-import { AllInfo, StoreInfo } from "@/types/info";
 
 export const useUserStore = defineStore("user", {
   persist: true,
-  state: (): StoreInfo => ({
+  state: () => ({
     username: "",
     email: "",
     is_admin: false,
@@ -24,7 +23,7 @@ export const useUserStore = defineStore("user", {
     },
   },
   actions: {
-    login(info: AllInfo) {
+    login(info: { username: string; email: string; is_admin: boolean; token: string }) {
       this.username = info.username;
       this.email = info.email;
       this.is_admin = info.is_admin;

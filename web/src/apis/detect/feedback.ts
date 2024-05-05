@@ -1,5 +1,4 @@
 import { PAGINATION } from "@/config";
-import { postDetectParams, postDetectResponse } from "@/types/detect/detect";
 import {
   deleteFeedbackParams,
   deleteFeedbackResponse,

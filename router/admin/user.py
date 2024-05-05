@@ -22,7 +22,7 @@ async def get_user(user_id: int, user: UserSchema = Depends(get_current_user)):
     return UserDetail.model_validate(user_obj)
 
 
-@user_router.post("/create", response_model=UserDetail)
+@user_router.post("/", response_model=UserDetail)
 async def create_user(new: UserAdminRegister, user: UserSchema = Depends(get_current_user)):
     # if exist
     if await UserSchema.get_or_none(username=new.username):
