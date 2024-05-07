@@ -31,8 +31,7 @@ const detect = async () => {
     hash: uploadResponse.value.image_hash,
     model_id: selectedModel.value!.id,
   };
-  const ret = await postDetectAPI(params);
-  detectResponse.value = ret;
+  detectResponse.value = await postDetectAPI(params);
   // generateTableData();
 };
 

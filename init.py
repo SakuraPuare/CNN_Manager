@@ -15,7 +15,8 @@ async def run():
     await Tortoise.generate_schemas()
 
     # create admin account
-    await UserSchema.create(username='admin', password='admin', email='admin@admin.com')
+    await UserSchema.create(username='admin', password='admin', email='admin@admin.com', is_admin=True)
 
 
-asyncio.run(run())
+if __name__ == '__main__':
+    asyncio.run(run())
